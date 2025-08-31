@@ -5,13 +5,21 @@ from django.contrib.auth import get_user_model
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Task
 from .serializers import TaskSerializer, UserSerializer
-from .permissions import IsOwner
 
 User = get_user_model()
 
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_permissions(self):
+        if self.action == "create":
+            return []
+        return [permissions.IsAuthenticated()]
+
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwner]
+    permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ["status", "priority"]
     ordering_fields = ["due_date", "priority"]
@@ -38,12 +46,3 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.save()
         serializer = self.get_serializer(task)
         return Response(serializer.data)
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    def get_permissions(self):
-        if self.action == "create":
-            return []
-        return [permissions.IsAuthenticated()]
