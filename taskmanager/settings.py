@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-)_02qm^5ka$ni9c!=xz4e$ei35(#95jl)b%qy-u*g%+5pdpnwx'
 DEBUG = False
-ALLOWED_HOSTS = ['TaskManagementAPI.herokuapp.com']
+ALLOWED_HOSTS = ['malakay.pythonanywhere.com']
 
 
 INSTALLED_APPS = [
